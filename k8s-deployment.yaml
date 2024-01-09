@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-one-deployment
+  labels:
+    app: project-one
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: project-one
+  template:
+    metadata:
+      labels:
+        app: project-one
+    spec:
+      containers:
+        - name: project-one
+          image: projectone:1.0
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent

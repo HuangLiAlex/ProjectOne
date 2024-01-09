@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  postgres-db:
+    container_name: user-db
+    image: postgres:16.1-alpine
+    environment:
+      POSTGRES_DB: users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  flyway:
+    container_name: users-flyway
+    image: flyway/flyway:10.4.1-alpine
+    command: -url=jdbc:postgresql://postgres-db:5432/users -user=postgres -password=postgres migrate
+    volumes:
+      - "./src/main/resources/db/migration:/flyway/sql"
+    depends_on:
+      - postgres-db
+
+volumes:
+  pgdata:
